@@ -3,7 +3,7 @@ module Binance
     class Error < StandardError; end
 
     def initialize(on_open: nil, on_close: nil)
-      super "wss://stream.binance.com:9443/stream", nil, ping: 180
+      super "wss://fstream.binance.com:9443/stream", nil, ping: 180
 
       @request_id_inc = 0
       @user_stream_handlers = {}
@@ -47,10 +47,11 @@ module Binance
     #     "B": "123456"   // Ignore
     #   }
     # }
-    def candlesticks!(symbols, interval, &on_receive)
+    def candlesticks!(symbols, intervals, &on_receive)
       symbols_fmt = symbols.is_a?(String) ? [symbols] : symbols
+      intervals_fmt = intervals.is_a?(String) ? [intervals] : intervals
       @candlesticks_handler = on_receive
-      subscribe(symbols_fmt.map { |s| "#{s.downcase}@kline_#{interval}" })
+      subscribe(symbols_fmt.map { |s| intervals_fmt.map{ |i| "#{s.downcase}@kline_#{i.downcase}"} }.flatten)
     end
 
     def user_data_stream!(listen_key, &on_receive)
