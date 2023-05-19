@@ -3,7 +3,7 @@ module Binance
     class Error < StandardError; end
 
     def initialize(on_open: nil, on_close: nil)
-      super "wss://fstream.binance.com:9443/ws", nil, ping: 180
+      super "wss://fstream.binance.com/ws/stream", nil, ping: 180
 
       @request_id_inc = 0
       @user_stream_handlers = {}
